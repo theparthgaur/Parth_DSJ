@@ -10,36 +10,115 @@ class Node {
 
 class LinkedList {
     Node head;
-    void add (int data) {
+
+    // Insertion at the end
+    public void insert(int data) {
+        Node newNode = new Node(data);
         if (head == null) {
-            head = new Node(data);
-            return;
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
         }
-        Node curr = head;
-        while (curr.next != null) {
-            curr = curr.next;
-        }
-        curr.next = new Node(data);
     }
 
-    void display () {
-        Node curr = head;
-        while (curr != null) {
-            System.out.print(curr.data + " ");
-            curr = curr.next;
+    // Deletion by value
+    public void delete(int key) {
+        if (head == null) return;
+
+        // If head needs to be removed
+        if (head.data == key) {
+            head = head.next;
+            return;
         }
+
+        Node current = head;
+        Node previous = null;
+
+        while (current != null && current.data != key) {
+            previous = current;
+            current = current.next;
+        }
+
+        // Key was not found
+        if (current == null) return;
+
+        // Unlink the node
+        previous.next = current.next;
+    }
+
+    // Searching for a value (returns the node or null)
+    public Node search(int key) {
+        Node current = head;
+        while (current != null) {
+            if (current.data == key) {
+                return current; // Return the found node
+            }
+            current = current.next;
+        }
+        return null; // Not found
+    }
+
+    // Sorting using Bubble Sort
+    public void sort() {
+        if (head == null) return;
+
+        boolean swapped;
+        do {
+            swapped = false;
+            Node current = head;
+
+            while (current.next != null) {
+                if (current.data > current.next.data) {
+                    // Swap data
+                    int temp = current.data;
+                    current.data = current.next.data;
+                    current.next.data = temp;
+                    swapped = true;
+                }
+                current = current.next;
+            }
+        } while (swapped);
+    }
+
+    // Display the linked list
+    public void display() {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
     }
 }
 
-class T{
-    public static void main(String[] args){
-        LinkedList l= new LinkedList();
-        l.add(5);
-        l.add(75);
-        l.add(90);
-        l.add(100);
-        l.add(175);
+class Main {
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList();
 
-        l.display();
+        list.insert(3);
+        list.insert(1);
+        list.insert(4);
+        list.insert(2);
+
+        System.out.println("Original List:");
+        list.display();
+
+        list.sort();
+        System.out.println("Sorted List:");
+        list.display();
+
+        Node foundNode = list.search(2);
+        System.out.println("Searching for 2: " + (foundNode != null ? "Found " + foundNode.data : "Not found"));
+
+        foundNode = list.search(5);
+        System.out.println("Searching for 5: " + (foundNode != null ? "Found " + foundNode.data : "Not found"));
+
+        list.delete(3);
+        System.out.println("List after deleting 3:");
+        list.display();
     }
 }
